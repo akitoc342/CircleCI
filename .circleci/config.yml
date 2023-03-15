@@ -12,7 +12,7 @@ jobs:
           name: run cfn-lint
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
-  executeClooudFormation:
+  executeCloudFormation:
     executor: aws-cli/default
     steps:
       - checkout
@@ -31,4 +31,4 @@ workflows:
       - cfn-lint
   cfn:
     jobs:
-      - executeCloudFomation
+      - executeCloudFormation
