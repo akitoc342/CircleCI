@@ -24,11 +24,11 @@ jobs:
           name: deploy Cloudformation
           command: 
             set -x
-            aws cloudformation deploy --template cloudformation/ cfnstack.yml
+            aws cloudformation deploy --template cloudformation/lecture10VPC.yml
+            aws cloudformation deploy --template cloudformation/lecture10SG.yml
+            aws cloudformation deploy --template cloudformation/lecture10EC2.yml
 workflows:
   raisetech:
     jobs:
       - cfn-lint
-  cfn:
-    jobs:
       - executeCloudFormation
