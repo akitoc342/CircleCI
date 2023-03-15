@@ -22,7 +22,7 @@ jobs:
           aws-region: AWS_DEFAULT_REGION
       - run: 
           name: deploy Cloudformation
-          command: 
+          command: |
             set -x
             aws cloudformation deploy --template cloudformation/lecture10VPC.yml
             aws cloudformation deploy --template cloudformation/lecture10SG.yml
