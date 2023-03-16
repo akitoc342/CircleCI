@@ -31,4 +31,6 @@ workflows:
   raisetech:
     jobs:
       - cfn-lint
-      - executeCloudFormation
+      - executeCloudFormation:
+          requires:
+            - cfn-lint
