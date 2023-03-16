@@ -24,7 +24,7 @@ jobs:
           name: deploy Cloudformation
           command: |
             set -x
-            aws cloudformation deploy --template cloudformation/lecture10VPC.yml --stack-name VPCtest
+            aws cloudformation deploy --template cloudformation/lecture10VPC.yml --stack-name VPCtest2
             aws cloudformation deploy --template cloudformation/lecture10SG.yml --stack-name SGtest
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test
 workflows:
