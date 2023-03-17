@@ -27,6 +27,12 @@ Resources:
       Tags:
       - Key: Name
         Value: cloudformationEC2
+#ElasticIp定義
+  IPAssoc:
+        Type: AWS::EC2::EIPAssociation
+        Properties:
+            InstanceId: !Ref WebInstance
+            EIP: 3.210.123.152
 #出力
 Outputs:
     StackEC2:
