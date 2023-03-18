@@ -4,4 +4,4 @@ become: yes
 yum:
   name: git
   state: present
-  lock_timeout: 180
+  lock_timeout: 240
