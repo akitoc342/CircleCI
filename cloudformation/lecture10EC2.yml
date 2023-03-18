@@ -36,7 +36,7 @@ Resources:
         Type: AWS::EC2::EIPAssociation
         Properties:
             InstanceId: !Ref WebInstance
-            EIP: 52.198.201.86
+            AllocationId: !GetAtt ElasticIP.AllocationId
 #出力
 Outputs:
     StackEC2:
