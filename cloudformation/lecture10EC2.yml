@@ -6,6 +6,10 @@ Resources:
         Type: AWS::EC2::KeyPair
         Properties:
             KeyName: newkey
+  ElasticIP:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: vpc
   WebInstance:
     Type: AWS::EC2::Instance
     Properties:
