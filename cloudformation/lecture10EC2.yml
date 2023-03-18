@@ -32,7 +32,7 @@ Resources:
         Type: AWS::EC2::EIPAssociation
         Properties:
             InstanceId: !Ref WebInstance
-            EIP: 3.210.123.152
+            EIP: 54.92.8.152
 #出力
 Outputs:
     StackEC2:
