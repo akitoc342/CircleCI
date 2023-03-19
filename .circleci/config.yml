@@ -48,6 +48,3 @@ workflows:
       - executeCloudFormation:
           requires:
             - cfn-lint
-      - executeAnsible:
-          requires:
-           - executeCloudFormation
