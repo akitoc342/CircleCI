@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   python: circleci/python@2.0.3
+  aws-cli: circleci/aws-cli@3.1.4
 jobs:
   cfn-lint:
     executor: python/default
@@ -11,7 +12,25 @@ jobs:
           name: run cfn-lint
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
+  executeCloudFormation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_DEFAULT_REGION
+      - run: 
+          name: deploy Cloudformation
+          command: |
+            set -x
+            aws cloudformation deploy --template cloudformation/lecture10VPC.yml --stack-name VPCtest
+            aws cloudformation deploy --template cloudformation/lecture10SG.yml --stack-name SGtest
+            aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
 workflows:
   raisetech:
     jobs:
       - cfn-lint
+      - executeCloudFormation:
+          requires:
+            - cfn-lint

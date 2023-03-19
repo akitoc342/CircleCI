@@ -6,6 +6,10 @@ Resources:
         Type: AWS::EC2::KeyPair
         Properties:
             KeyName: newkey
+  ElasticIP:
+    Type: "AWS::EC2::EIP"
+    Properties:
+      Domain: vpc
   WebInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -27,6 +31,12 @@ Resources:
       Tags:
       - Key: Name
         Value: cloudformationEC2
+#ElasticIp定義
+  IPAssoc:
+        Type: AWS::EC2::EIPAssociation
+        Properties:
+            InstanceId: !Ref WebInstance
+            AllocationId: !GetAtt ElasticIP.AllocationId
 #出力
 Outputs:
     StackEC2:
