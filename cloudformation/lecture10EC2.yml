@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"  
 Description: EC2 template
-#ec2インスタンス作成
+#ec2インスタンス作成　
 Resources:  
   NewKeyPair:
         Type: AWS::EC2::KeyPair
