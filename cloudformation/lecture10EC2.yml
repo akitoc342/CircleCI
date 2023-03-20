@@ -27,7 +27,7 @@ Resources:
       Tags:
       - Key: Name
         Value: cloudformationEC2
-#ElasticIp定義 　
+#ElasticIp定義 
   IPAssoc:
         Type: AWS::EC2::EIPAssociation
         Properties:
