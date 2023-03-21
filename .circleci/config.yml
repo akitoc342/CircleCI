@@ -35,7 +35,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - bc:0e:e8:5f:84:80:c6:d5:72:70:32:f0:7b:6b:f4:bd
+            - 	7f:c1:73:f8:ad:bc:6e:74:4f:1e:d4:7f:51:fd:28:6b
       - ansible-playbook/install:
           version: '2.10.7'
       - ansible-playbook/playbook:
@@ -48,3 +48,6 @@ workflows:
       - executeCloudFormation:
           requires:
             - cfn-lint
+      - executeAnsible:
+          requires:
+            - executeCloudFormation
