@@ -1,15 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"  
 Description: EC2 template
-#ec2インスタンス作成
+#ec2インスタンス作成　
 Resources:  
   NewKeyPair:
         Type: AWS::EC2::KeyPair
         Properties:
             KeyName: newkey
-  ElasticIP:
-    Type: "AWS::EC2::EIP"
-    Properties:
-      Domain: vpc
   WebInstance:
     Type: AWS::EC2::Instance
     Properties:
@@ -31,12 +27,12 @@ Resources:
       Tags:
       - Key: Name
         Value: cloudformationEC2
-#ElasticIp定義
+#ElasticIp定義 
   IPAssoc:
         Type: AWS::EC2::EIPAssociation
         Properties:
             InstanceId: !Ref WebInstance
-            AllocationId: !GetAtt ElasticIP.AllocationId
+            EIP: 43.206.63.40
 #出力
 Outputs:
     StackEC2:

@@ -2,6 +2,8 @@ version: 2.1
 orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@3.1.4
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+
 jobs:
   cfn-lint:
     executor: python/default
@@ -27,6 +29,18 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10VPC.yml --stack-name VPCtest
             aws cloudformation deploy --template cloudformation/lecture10SG.yml --stack-name SGtest
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
+  executeAnsible:
+    executor: ansible-playbook/default
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 7f:c1:73:f8:ad:bc:6e:74:4f:1e:d4:7f:51:fd:28:6b
+      - ansible-playbook/install:
+          version: '2.10.7'
+      - ansible-playbook/playbook:
+          playbook: ansible/playbook.yml
+          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa'
 workflows:
   raisetech:
     jobs:
@@ -34,3 +48,6 @@ workflows:
       - executeCloudFormation:
           requires:
             - cfn-lint
+      - executeAnsible:
+          requires:
+            - executeCloudFormation
