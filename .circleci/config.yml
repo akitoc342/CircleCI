@@ -57,7 +57,7 @@ jobs:
             gem install rake
             gem install ed25519
             gem install bcrypt_pbkdf
-            cd cd serverspec
+            cd serverspec
             bundle exec rake spec
      
 workflows:
