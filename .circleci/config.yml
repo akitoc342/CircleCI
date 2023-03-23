@@ -3,6 +3,7 @@ orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@3.1.4
   ansible-playbook: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@2.0.0
 
 jobs:
   cfn-lint:
@@ -35,12 +36,30 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 7f:c1:73:f8:ad:bc:6e:74:4f:1e:d4:7f:51:fd:28:6b
+            - 2f:7c:4f:93:66:0f:94:7d:f7:e3:7e:49:43:a2:f9:28
       - ansible-playbook/install:
           version: '2.10.7'
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa'
+  executeServerspec:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - ruby/install:
+          version: '3.1.2'
+      - run :
+          name: executeServerspec
+          command: |
+            gem install bundler
+            gem install serverspec
+            gem install rake
+            gem install ed25519
+            gem install bcrypt_pbkdf
+            cd serverspec
+            bundle exec rake spec
+     
 workflows:
   raisetech:
     jobs:
@@ -51,3 +70,6 @@ workflows:
       - executeAnsible:
           requires:
             - executeCloudFormation
+      - executeServerspec:
+          requires:
+            - executeAnsible
