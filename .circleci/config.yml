@@ -49,15 +49,12 @@ jobs:
       - checkout
       - ruby/install:
           version: '3.1.2'
+      - install-deps:
+          ruby/app-dir: serverSpec
       - run :
           name: executeServerspec
           command: |
-            gem install bundler
-            gem install serverspec
-            gem install rake
-            gem install ed25519
-            gem install bcrypt_pbkdf
-            cd serverspec
+            cd serverSpec
             bundle exec rake spec
      
 workflows:
