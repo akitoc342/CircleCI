@@ -49,8 +49,8 @@ jobs:
       - checkout
       - ruby/install:
           version: '3.1.2'
-      - install-deps:
-          ruby/app-dir: serverSpec
+      - ruby/install-deps:
+          app-dir: serverSpec
       - run :
           name: executeServerspec
           command: |
