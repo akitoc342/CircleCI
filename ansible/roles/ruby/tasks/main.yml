@@ -29,16 +29,3 @@
     dest: ~/.rbenv/plugins/ruby-build
 
 #rubyのインストール　
-- name: check ruby installed
-  stat:
-    path: /home/ec2-user/.rbenv/shims/ruby
-  register: ruby_installed
-
-- name: install ruby
-  become_user: ec2-user
-  shell: bash -lc "rbenv install {{ ruby_version }}"
-  when: not ruby_installed.stat.exists
-
-- name: set default ruby version
-  become_user: ec2-user
-  shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
