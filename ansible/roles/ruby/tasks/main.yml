@@ -28,7 +28,7 @@
     repo: https://github.com/sstephenson/ruby-build.git
     dest: ~/.rbenv/plugins/ruby-build
 
-#rubyのインストール
+#rubyのインストール　
 - name: check ruby installed
   stat:
     path: /home/ec2-user/.rbenv/shims/ruby
