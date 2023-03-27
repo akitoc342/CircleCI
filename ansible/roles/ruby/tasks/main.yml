@@ -1,0 +1,44 @@
+# rbenvのインストール
+---
+- name: install rbenv
+  become: yes
+  git: 
+    repo: https://github.com/sstephenson/rbenv.git 
+    dest: ~/.rbenv
+
+
+- name: Add rbenv to PATH
+  lineinfile: 
+    path: ~/.bash_profile
+    line: 'export PATH="$HOME/.rbenv/bin:$PATH"'
+
+
+- name: eval rbenv init
+  lineinfile: 
+    path: ~/.bash_profile
+    line: 'eval "$(rbenv init -)"'
+
+- name: Load rbenv setting
+  become_user: ec2-user
+  shell: bash -lc "source ~/.bash_profile"
+
+#ruby-buildのインストール
+- name: install ruby-build
+  git:
+    repo: https://github.com/sstephenson/ruby-build.git
+    dest: ~/.rbenv/plugins/ruby-build
+
+#rubyのインストール
+- name: check ruby installed
+  stat:
+    path: /home/ec2-user/.rbenv/shims/ruby
+  register: ruby_installed
+
+- name: install ruby
+  become_user: ec2-user
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  when: not ruby_installed.stat.exists
+
+- name: set default ruby version
+  become_user: ec2-user
+  shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
