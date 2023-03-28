@@ -24,7 +24,7 @@
     path: /home/ec2-user/.bash_profile
     line: 'eval "$(rbenv init -)"'
 
-- name: reload rbenv setting
+- name: rbenv setting
   shell: bash -lc "source ~/.bash_profile"
 
 #ruby-buildのインストール
@@ -33,15 +33,10 @@
     repo: https://github.com/sstephenson/ruby-build.git
     dest: /home/ec2-user/.rbenv/plugins/ruby-build
 
-- name: check ruby installed
-  stat:
-    path: /home/ec2-user/.rbenv/shims/ruby
-  register: ruby_installed
 
 - name: install ruby
   become_user: ec2-user
   shell: bash -lc "rbenv install {{ ruby_version }}"
-  when: not ruby_installed.stat.exists
 
 - name: set default ruby version
   become_user: ec2-user
