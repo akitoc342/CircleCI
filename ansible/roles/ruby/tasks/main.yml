@@ -20,7 +20,7 @@
 
 - name: Load rbenv setting
   become_user: ec2-user
-  shell: bash -lc "source ~/.bash_profile"
+  shell: bash -lc "source /home/ec2-user/.bash_profile"
 
 #ruby-buildのインストール
 - name: install ruby-build
