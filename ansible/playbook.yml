@@ -6,3 +6,4 @@
     - { role: git, tags: git }
     - { role: package, tags: package }
     - { role: ruby, tags: ruby }
+    - { role: mysql, tags: mysql }
