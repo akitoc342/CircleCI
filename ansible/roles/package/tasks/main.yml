@@ -28,7 +28,8 @@
     - libicu-devel
     - libxml2
     - libxml2-devel
-    - libxslt-develglibc-headers
+    - libxslt-devel
+    - glibc-headers
     - readline
     - libxml2
     - libxslt
