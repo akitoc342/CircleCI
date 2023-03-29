@@ -17,6 +17,7 @@
     - make
     - patch
     - curl
+    - zlib
     - zlib-devel
     - openssl-devel
     - ImageMagick-devel
@@ -25,8 +26,14 @@
     - libffi-devel
     - libyaml-devel
     - libicu-devel
+    - libxml2
     - libxml2-devel
-    - libxslt-devel
+    - libxslt-develglibc-headers
+    - readline
+    - libxml2
+    - libxslt
+    - sqlite-devel
+
 
 #　Nodejsのインストール  
 - name: Setup nodejs14.x
