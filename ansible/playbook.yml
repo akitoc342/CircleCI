@@ -7,3 +7,4 @@
     - { role: package, tags: package }
     - { role: ruby, tags: ruby }
     - { role: mysql, tags: mysql }
+    - { role: appclone, tags: appclone }
