@@ -12,6 +12,6 @@
 #gem  install
 - name: gem install
   become_user: ec2-user
-  ansible.builtin.comSmand:
+  ansible.builtin.command:
     cmd: bash -lc "bundle install"
     chdir: /home/ec2-user/raisetech-live8-sample-app/
