@@ -1,0 +1,17 @@
+---
+#gemのアップデート
+- name: gem update
+  become_user: ec2-user
+  shell: bash -lc "gem update --system"  
+
+#bundler　install
+- name: install bundler 
+  become_user: ec2-user
+  shell: bash -lc "gem install bundler"
+
+#gem  install
+- name: gem install
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle install"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
