@@ -1,4 +1,9 @@
 ---
+#MySQLを一時停止（bundleインストールが処理能力不足でエラーとなる為）
+- name: stop mysql
+  become: yes
+  shell: bash -lc "service mysqld stop"
+
 #gemのアップデート
 - name: gem update
   become_user: ec2-user
@@ -15,3 +20,8 @@
   ansible.builtin.command:
     cmd: bash -lc "bundle install"
     chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+#停止していたMySQLを起動
+- name: stop mysql
+  become: yes
+  shell: bash -lc "service mysqld start"
