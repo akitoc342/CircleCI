@@ -14,27 +14,24 @@
     state: present  
   with_items:
     - gcc-c++
-    - make
-    - patch
-    - curl
+    - glibc-headers
+    - openssl-devel
+    - readline
+    - libyaml-devel
+    - readline-devel
     - zlib
     - zlib-devel
-    - openssl-devel
-    - ImageMagick-devel
-    - readline-devel
-    - libcurl-devel
     - libffi-devel
-    - libyaml-devel
-    - libicu-devel
-    - libxml2
-    - libxml2-devel
-    - libxslt-devel
-    - glibc-headers
-    - readline
     - libxml2
     - libxslt
+    - libxml2-devel
+    - libxslt-devel
     - sqlite-devel
-    - g++ make
+    - libpng-devel
+    - libjpeg-devel
+    - libtiff-devel
+    - gcc
+
 
 
 #　Nodejsのインストール  
