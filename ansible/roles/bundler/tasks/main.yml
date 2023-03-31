@@ -14,10 +14,10 @@
 
 #bundler　install
 - name: install bundler 
-    gem:
-      name: bundler
-      version: "{{ bundler_version }}"
-      executable: /home/ec2-user/.rbenv/shims/gem
+  gem:
+    name: bundler
+    version: "{{ bundler_version }}"
+    executable: /home/ec2-user/.rbenv/shims/gem
 
 #gem  install
 - name: gem install
