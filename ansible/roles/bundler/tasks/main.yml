@@ -15,7 +15,7 @@
 #bundler　install
 - name: install bundler 
   become_user: ec2-user
-  shell: bash -lc "gem install bundler"
+  shell: bash -lc "gem install bundler{{ bundler_version }}"
 
 #gem  install
 - name: gem install
