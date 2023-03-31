@@ -14,8 +14,10 @@
 
 #bundler　install
 - name: install bundler 
-  become_user: ec2-user
-  shell: bash -lc "gem install bundler{{ bundler_version }}"
+    gem:
+    name: bundler
+    version: "{{ bundler_version }}"
+    executable: /home/ec2-user/.rbenv/shims/gem
 
 #gem  install
 - name: gem install
