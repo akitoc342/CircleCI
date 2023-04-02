@@ -9,3 +9,4 @@
     - { role: mysql, tags: mysql }
     - { role: appclone, tags: appclone }
     - { role: bundler, tags: bundler }
+    - { role: app, tags: app }

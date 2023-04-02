@@ -1,0 +1,78 @@
+---
+#データベース設定のファイルをコピー
+- name: edit database.yml
+  template: 
+    src: templates/database.yml.j2
+    dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
+    owner: ec2-user
+    group: ec2-user
+
+#データベースへのアクセス設定
+- name: Set DB env
+  lineinfile: 
+    path: /home/ec2-user/.bash_profile
+    line: 'export {{ item }}'
+  with_items:
+      - "{{ DATABASE_USERNAME }}"
+      - "{{ DATABASE_PASSWORD }}"
+      - "{{ DATABASE_HOSTNAME }}"
+
+- name: Load database env setting
+  become_user: ec2-user
+  shell: bash -lc "source ~/.bash_profile"
+
+#マスターキーの状態確認
+- name: Check masterkey exists
+  stat:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+  register: masterkey_stat
+
+#マスターキーの設定
+- name: Set master.key
+  block:
+  - name: Deleate credentials
+    file:
+      path: /home/ec2-user/raisetech-live8-sample-app/config/credentials.yml.enc
+      state: absent
+
+  - name: Make master.key
+    become: yes
+    ansible.builtin.command:
+      cmd: "EDITOR=vim bundle exec rails credentials:edit"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+  when: not masterkey_stat.stat.exists
+
+#webpackerのビルド
+- name: Build webpacker setting
+  become_user: ec2-user
+  npm:
+    name: build
+    path: /home/ec2-user/raisetech-live8-sample-app
+
+- name: Cache class change
+  ansible.builtin.replace:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
+    regexp: '\bconfig.cache_classes = true\b'
+    replace: 'config.cache_classes = false'
+
+#データベースの作成、マイグレーションの実施
+- name: Setting database
+  become_user: ec2-user
+  block:
+  - name: Create database
+    ansible.builtin.command:
+      cmd: bash -lc "bundle exec rails db:create RAILS_ENV=production"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+    ignore_errors: yes
+  - name: Migrate database
+    ansible.builtin.command:
+      cmd: bash -lc "bundle exec rails db:migrate RAILS_ENV=production"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+    ignore_errors: yes
+
+#コンパイルの実施
+- name: asset precompile
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle exec rails assets:precompile RAILS_ENV=production"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
