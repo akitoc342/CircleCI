@@ -4,4 +4,4 @@ bundler_version: 2.3.14
 
 DATABASE_USERNAME: 'sampleappdemo'
 DATABASE_PASSWORD: 'aki42544adfc'
-DATABASE_HOSTNAME: 'cloudformationrds.cykvm6oaydwv.ap-northeast-1.rds.amazonaws.com'
+DATABASE_HOSTNAME: 'cloudformationrds.cykvm6oaydwv.apnortheast1.rds.amazonaws.com'
