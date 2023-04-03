@@ -38,7 +38,7 @@
   - name: Make master.key
     become: yes
     ansible.builtin.command:
-      cmd: "EDITOR=vim bundle exec rails credentials:edit"
+      cmd: "EDITOR='code --wait' rails credentials:edit"
       chdir: /home/ec2-user/raisetech-live8-sample-app/config
   when: not masterkey_stat.stat.exists
 
