@@ -1,10 +1,4 @@
 ---
-- name: Change permission
-  become: yes
-  ansible.builtin.file:
-    path: /home/ec2-user
-    state: directory
-    mode: 0755
 #データベース設定のファイルをコピー
 - name: edit database.yml
   template: 
@@ -44,8 +38,8 @@
   - name: Make master.key
     become: yes
     ansible.builtin.command:
-      cmd: "EDITOR=vim bundle exec rails credentials:edit"
-      chdir: /home/ec2-user/raisetech-live8-sample-app/config
+      cmd: bash -lc "EDITOR=vim bundle exec rails credentials:edit"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
   when: not masterkey_stat.stat.exists
 
 #webpackerのビルド 
