@@ -21,6 +21,20 @@
   become_user: ec2-user
   shell: bash -lc "source ~/.bash_profile"
 
+#check map
+- name: check map
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "pwd"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+#check map2
+- name: check map2
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "ls"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
 #マスターキーの状態確認
 - name: Check masterkey exists
   stat:
