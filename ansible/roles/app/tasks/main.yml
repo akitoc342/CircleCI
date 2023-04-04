@@ -27,18 +27,17 @@
     path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
   register: masterkey_stat
 
-#マスターキーの設定
+#マスターキーの作成
 - name: Set master.key
   block:
   - name: Deleate credentials
     file:
       path: /home/ec2-user/raisetech-live8-sample-app/config/credentials.yml.enc
       state: absent
-
   - name: Make master.key
     become: yes
     ansible.builtin.command:
-      cmd: bash -lc "EDITOR=vim bundle exec rails credentials:edit"
+      cmd: "EDITOR=vim bundle exec rails credentials:edit"
       chdir: /home/ec2-user/raisetech-live8-sample-app/
   when: not masterkey_stat.stat.exists
 
