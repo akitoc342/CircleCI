@@ -26,14 +26,24 @@
   become_user: ec2-user
   ansible.builtin.command:
     cmd: bash -lc "pwd"
-    chdir: /home/ec2-user/raisetech-live8-sample-app/
+    chdir: /home/ec2-user/raisetech-live8-sample-app/config
+  register: pwd
+    
+- name: map pwd
+  ansible.builtin.debug:
+    var: pwd
 
 #check map2
 - name: check map2
   become_user: ec2-user
   ansible.builtin.command:
     cmd: bash -lc "ls"
-    chdir: /home/ec2-user/raisetech-live8-sample-app/
+    chdir: /home/ec2-user/raisetech-live8-sample-app/config
+  register: ls
+    
+- name: map ls
+  ansible.builtin.debug:
+    var: ls
 
 #マスターキーの状態確認
 - name: Check masterkey exists
