@@ -5,7 +5,7 @@
     path: /home/ec2-user
     state: directory
     mode: 0755
-#データベース設定のファイルをコピー 
+#データベース設定のファイルをコピー  
 - name: edit database.yml
   template: 
     src: templates/database.yml
