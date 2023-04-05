@@ -65,7 +65,7 @@
       chdir: /home/ec2-user/raisetech-live8-sample-app/
   when: not masterkey_stat.stat.exists
 
-#webpackerのビルド 
+#webpackerのビルド  
 - name: Build webpacker setting
   become_user: ec2-user
   npm:
