@@ -13,7 +13,7 @@
     owner: ec2-user
     group: ec2-user
 
-#データベースへのアクセス設定
+#データベースへのアクセス設定　
 - name: Set DB env
   lineinfile: 
     path: /home/ec2-user/.bash_profile
