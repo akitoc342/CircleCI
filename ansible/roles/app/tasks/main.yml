@@ -50,12 +50,6 @@
     group: ec2-user
   when: not masterkey_stat.stat.exists
 
-- name: edit masterkey
-  become_user: ec2-user
-  lineinfile:
-    path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
-    line: "{{ master_key }}"
-  when: not masterkey_stat.stat.exists
 #webpackerのビルド  
 - name: Build webpacker setting
   become_user: ec2-user
