@@ -56,12 +56,18 @@
   npm:
     name: build
     path: /home/ec2-user/raisetech-live8-sample-app
-
+#production.rb内のcashe_classをfalseに変更
 - name: Cache class change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
     regexp: '\bconfig.cache_classes = true\b'
     replace: 'config.cache_classes = false'
+#storageの変更
+- name: storage change
+  ansible.builtin.replace:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
+    regexp: '\bconfig.active_storage.service = :amazon\b'
+    replace: 'config.active_storage.service = :local'
 
 #データベースの作成、マイグレーションの実施
 - name: Setting database
