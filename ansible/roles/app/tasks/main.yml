@@ -84,7 +84,7 @@
       chdir: /home/ec2-user/raisetech-live8-sample-app/
     ignore_errors: yes
 
-#コンパイルの実施
+#コンパイルの実施 
 - name: asset precompile
   become_user: ec2-user
   ansible.builtin.command:
