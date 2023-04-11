@@ -33,7 +33,7 @@
     path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
   register: masterkey_stat
 
-#マスターキーの作成
+#マスターキーの作成 
 - name: edit credentialfile
   template: 
     src: templates/production.yml.enc.j2
