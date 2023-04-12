@@ -1,6 +1,7 @@
 [TargetNode]
 43.206.63.40
 [TargetNode:vars]
+master_key=
 DATABASE_USERNAME=DATABASE_USER='sampleappdemo'
 DATABASE_PASSWORD=DATABASE_PASSWORD='aki42544adfc'
 DATABASE_HOSTNAME=DATABASE_HOST='cloudformationrds.cykvm6oaydwv.ap-northeast-1.rds.amazonaws.com'
