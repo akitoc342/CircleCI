@@ -27,7 +27,7 @@
   become_user: ec2-user
   shell: bash -lc "source ~/.bash_profile"
 
-#マスターキーの状態確認
+#マスターキーの状態確認 
 - name: Check masterkey exists
   stat:
     path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
