@@ -42,7 +42,7 @@ jobs:
           version: '2.10.7'
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"'
+          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$RAILS_MASTER_KEY"'
   executeServerspec:
     docker:
       - image: 'cimg/base:stable'
