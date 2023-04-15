@@ -13,7 +13,7 @@
   become_user: ec2-user
   lineinfile:
     path: /home/ec2-user/raisetech-live8-sample-app/Gemfile
-    line: ' gem 'dotenv-rails' '
+    line: gem 'dotenv-rails'
 
 
 #gemのアップデート
