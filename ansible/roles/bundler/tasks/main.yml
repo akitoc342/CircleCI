@@ -7,6 +7,13 @@
     owner: ec2-user
     group: ec2-user
     recurse: yes
+
+#dotenv-railsをGemfileに追加
+- name: gem update
+  become_user: ec2-user
+  shell: bash -lc "gem 'dotenv-rails'"  
+
+
 #gemのアップデート
 - name: gem update
   become_user: ec2-user
