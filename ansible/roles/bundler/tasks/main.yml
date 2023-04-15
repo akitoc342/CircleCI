@@ -9,9 +9,11 @@
     recurse: yes
 
 #dotenv-railsをGemfileに追加
-- name: gem update
+- name: linein dotenv-rails
   become_user: ec2-user
-  shell: bash -lc "gem 'dotenv-rails'"  
+  lineinfile:
+    path: /home/ec2-user/raisetech-live8-sample-app/Gemfile
+    line: ' gem 'dotenv-rails' '
 
 
 #gemのアップデート
