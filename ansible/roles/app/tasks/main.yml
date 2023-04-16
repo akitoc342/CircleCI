@@ -22,6 +22,14 @@
     owner: ec2-user
     group: ec2-user
 
+#.envfileの作成
+- name: Set.env
+  block: 
+  - name: Touch master.key
+    file:
+      path: /home/ec2-user/raisetech-live8-sample-app/.env
+      state: touch
+
 #データベースへのアクセス設定　
 - name: Set DB env
   lineinfile: 
@@ -35,6 +43,13 @@
 - name: Load database env setting
   become_user: ec2-user
   shell: bash -lc "source ~/.bash_profile"
+
+#.envにRAILS_MASTER_KEY追加 
+- name: linein RAILS_MASTER_KEY
+  become_user: ec2-user
+  lineinfile:
+    path: /home/ec2-user/raisetech-live8-sample-app/.env
+    line: RAILS_MASTER_KEY = 'aaaa'
 
 #マスターキーの状態確認 
 - name: Check masterkey exists
