@@ -45,7 +45,7 @@
   shell: bash -lc "source ~/.bash_profile"
 
 #.envにRAILS_MASTER_KEY追加 
-- name: linein RAILS_MASTER_KEY
+- name: line in RAILS_MASTER_KEY
   become_user: ec2-user
   lineinfile:
     path: /home/ec2-user/raisetech-live8-sample-app/.env
