@@ -10,11 +10,12 @@
 /test/version_tmp/
 /tmp/
 .idea/
-production.key.j2
-vars.yml
+
 
 # Used by dotenv library to load environment variables.
-# .env
+.env
+vars.yml
+production.key.j2
 
 # Ignore Byebug command history file.
 .byebug_history
