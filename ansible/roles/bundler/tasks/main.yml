@@ -8,14 +8,6 @@
     group: ec2-user
     recurse: yes
 
-#dotenv-railsをGemfileに追加 
-- name: linein dotenv-rails
-  become_user: ec2-user
-  lineinfile:
-    path: /home/ec2-user/raisetech-live8-sample-app/Gemfile
-    line: gem 'dotenv-rails'
-
-
 #gemのアップデート
 - name: gem update
   become_user: ec2-user

@@ -6,13 +6,7 @@
     state: directory
     mode: 0755
 
-#.envfileの作成
-- name: Set.env file
-  block: 
-  - name: Touch master.key
-    file:
-      path: /home/ec2-user/raisetech-live8-sample-app/.env
-      state: touch
+
 
 #データベース設定のファイルをコピー  
 - name: edit database.yml
@@ -21,14 +15,6 @@
     dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
     owner: ec2-user
     group: ec2-user
-
-#.envfileの作成
-- name: Set.env
-  block: 
-  - name: Touch master.key
-    file:
-      path: /home/ec2-user/raisetech-live8-sample-app/.env
-      state: touch
 
 #データベースへのアクセス設定　
 - name: Set DB env
@@ -44,12 +30,15 @@
   become_user: ec2-user
   shell: bash -lc "source ~/.bash_profile"
 
-#.envにRAILS_MASTER_KEY追加 
-- name: line in RAILS_MASTER_KEY
-  become_user: ec2-user
-  lineinfile:
-    path: /home/ec2-user/raisetech-live8-sample-app/.env
-    line: RAILS_MASTER_KEY='{{ master_key }}'
+#config/credentials内に残っているdevelopment.yml.enc、production.yml.encを削除（appclone時の残りを削除）
+- name: Deleate old credentials1
+    file:
+      path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/evelopment.yml.enc
+      state: absent
+- name: Deleate old credentials2
+    file:
+      path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/production.yml.enc
+      state: absent
 
 #マスターキーの状態確認 
 - name: Check masterkey exists
