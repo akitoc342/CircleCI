@@ -5,6 +5,15 @@
     path: /home/ec2-user
     state: directory
     mode: 0755
+
+#.envfileの作成
+- name: Set.env file
+  block: 
+  - name: Touch master.key
+    file:
+      path: /home/ec2-user/raisetech-live8-sample-app/.env
+      state: touch
+
 #データベース設定のファイルをコピー  
 - name: edit database.yml
   template: 
