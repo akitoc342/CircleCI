@@ -8,7 +8,7 @@
     group: ec2-user
     recurse: yes
 
-#dotenv-railsをGemfileに追加
+#dotenv-railsをGemfileに追加 
 - name: linein dotenv-rails
   become_user: ec2-user
   lineinfile:
