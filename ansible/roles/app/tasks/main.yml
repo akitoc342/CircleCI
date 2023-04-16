@@ -32,13 +32,13 @@
 
 #config/credentials内に残っているdevelopment.yml.enc、production.yml.encを削除（appclone時の残りを削除）
 - name: Deleate old credentials1
-    file:
-      path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/evelopment.yml.enc
-      state: absent
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/evelopment.yml.enc
+    state: absent
 - name: Deleate old credentials2
-    file:
-      path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/production.yml.enc
-      state: absent
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/production.yml.enc
+    state: absent
 
 #マスターキーの状態確認 
 - name: Check masterkey exists
