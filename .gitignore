@@ -10,8 +10,8 @@
 /test/version_tmp/
 /tmp/
 .idea/
-/home/ec2-user/CircleCI/ansible/roles/app/templates/production.key.j2
-/home/ec2-user/CircleCI/ansible/vars.yml
+production.key.j2
+vars.yml
 
 # Used by dotenv library to load environment variables.
 # .env
