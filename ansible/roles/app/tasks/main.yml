@@ -57,7 +57,7 @@
 
 - name: edit key
   template:
-    src: templates/production.key.j2
+    src: templates/production.masterkey.j2
     dest: /home/ec2-user/raisetech-live8-sample-app/config/master.key
     owner: ec2-user
     group: ec2-user
