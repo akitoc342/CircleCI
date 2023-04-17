@@ -66,7 +66,7 @@
 - name: Add masterkey bash profile
   lineinfile: 
     path: /home/ec2-user/.bash_profile
-    line: 'export RAILS_MASTER_KEY="$HOME/ec2-user/raisetech-live8-sample-app/config/master.key"'
+    line: 'export RAILS_MASTER_KEY="{{ master_key }}"'
 
 - name: Load masterkey env setting
   become_user: ec2-user
