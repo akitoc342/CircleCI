@@ -1,1 +1,1 @@
-/ansible/role/app/templates/production.mkey.j2
+production.masterkey.j2
