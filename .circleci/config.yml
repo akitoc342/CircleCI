@@ -46,9 +46,9 @@ jobs:
       - run: 
           name: ANSIBLE_VAULT_PASS
           pre:
-            pip install -r requirements.txt
-            echo $ANSIBLE_VAULT_PASSWORD > ansible_vault_password.txt
-            ansible-vault decrypt secret_file --vault-password-file=ansible_vault_password.txt
+            - pip install -r requirements.txt
+            - echo $ANSIBLE_VAULT_PASSWORD > ansible_vault_password.txt
+            - ansible-vault decrypt secret_file --vault-password-file=ansible_vault_password.txt
   executeServerspec:
     docker:
       - image: 'cimg/base:stable'
