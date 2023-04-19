@@ -45,10 +45,10 @@ jobs:
           playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"'
       - run: 
           name: ANSIBLE_VAULT_PASS
-          command: |
-              pip install -r requirements.txt
-              echo $ANSIBLE_VAULT_PASSWORD > ansible_vault_password.txt
-              ansible-vault decrypt secret_file --vault-password-file=ansible_vault_password.txt
+          pre:
+            pip install -r requirements.txt
+            echo $ANSIBLE_VAULT_PASSWORD > ansible_vault_password.txt
+            ansible-vault decrypt secret_file --vault-password-file=ansible_vault_password.txt
   executeServerspec:
     docker:
       - image: 'cimg/base:stable'
