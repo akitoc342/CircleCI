@@ -50,7 +50,7 @@ jobs:
             export ANSIBLE_VAULT_PASSWORD=<password>
             source ~/.bash_profile
             echo $ANSIBLE_VAULT_PASSWORD
-        - store_artifacts:
+      - store_artifacts:
           path: env.txt
 
       - ansible-playbook/playbook:
