@@ -46,6 +46,9 @@ jobs:
             echo 'ANSIBLE_VAULT_PASSWORD: '${ANSIBLE_VAULT_PASSWORD} >> env.txt
             pwd
             ls
+            cd ~/env.txt
+            pwd
+            ls
 
       - store_artifacts:
           path: env.txt
