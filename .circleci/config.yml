@@ -43,6 +43,8 @@ jobs:
       - run: 
           name: ansible_vault_pass
           command: |
+            apt-get update
+            apt-get install vim
             echo export EDITOR=vim >> ~/.bashrc
             vim ~/.bash_profile
             export ANSIBLE_VAULT_PASSWORD_FILE = ~/.vault_pass
