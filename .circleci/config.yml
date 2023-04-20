@@ -44,11 +44,6 @@ jobs:
           name: ansible_vault_pass
           command: |
             echo 'ANSIBLE_VAULT_PASSWORD: '${ANSIBLE_VAULT_PASSWORD} >> env.txt
-            pwd
-            ls
-            cd ~/
-            pwd
-            ls
 
       - store_artifacts:
           path: env.txt
