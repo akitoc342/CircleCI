@@ -43,14 +43,15 @@ jobs:
       - run: 
           name: ansible_vault_pass
           command: |
-            sudo apt-get -y update
-            sudo apt-get -y install vim
+            echo 'ANSIBLE_VAULT_PASSWORD: '${ANSIBLE_VAULT_PASSWORD} >> env.txt
             echo export EDITOR=vim >> ~/.bashrc
             vim ~/.bash_profile
             export ANSIBLE_VAULT_PASSWORD_FILE = ~/.vault_pass
             export ANSIBLE_VAULT_PASSWORD=<password>
             source ~/.bash_profile
             echo $ANSIBLE_VAULT_PASSWORD
+        - store_artifacts:
+          path: env.txt
 
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
