@@ -44,18 +44,12 @@ jobs:
           name: ansible_vault_pass
           command: |
             echo 'ANSIBLE_VAULT_PASSWORD: '${ANSIBLE_VAULT_PASSWORD} >> env.txt
-            echo export EDITOR=vim >> ~/.bashrc
-            vim ~/.bash_profile
-            export ANSIBLE_VAULT_PASSWORD_FILE = ~/.vault_pass
-            export ANSIBLE_VAULT_PASSWORD=<password>
-            source ~/.bash_profile
-            echo $ANSIBLE_VAULT_PASSWORD
       - store_artifacts:
           path: env.txt
 
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"  --vault-password-file /path/to/my/vault-password-file site.yml'
+          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"'
 
   executeServerspec:
     docker:
