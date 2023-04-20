@@ -40,25 +40,17 @@ jobs:
             - 8b:07:4b:4d:14:34:3e:cd:65:b7:28:1d:77:9f:73:3f
       - ansible-playbook/install:
           version: '2.10.7'
+      - run: 
+          name: ansible_vault_pass
+          command: |
+            export ANSIBLE_VAULT_PASSWORD_FILE=~/bin/vault-env
+            export ANSIBLE_VAULT_PASSWORD=<password>
+            echo $ANSIBLE_VAULT_PASSWORD
+
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"'
-    machine:
-      services:
-        - docker
+          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "master_key=$MASTER_KEY"  --vault-password-file /path/to/my/vault-password-file site.yml'
 
-    dependencies:
-      pre:
-        - if [[ -e docker_ansible_image.tar ]]; then cat docker_ansible_image.tar | docker import - kenjiskywalker/dockerfile-centos-ansible ; docker load --input docker_ansible_image.tar ; else docker build . ; docker save -o docker_ansible_image.tar kenjiskywalker/dockerfile-centos-ansible ; fi
-        - echo "${$ANSIBLE_VAULT_PASSWORD}" > $(pwd)/ansible/vault.txt
-
-      cache_directories:
-        - "docker_ansible_image.tar"
-
-    test:
-      post:
-        - docker run -v $(pwd)/ansible:/ansible kenjiskywalker/dockerfile-centos-ansible ansible-playbook /ansible/ci.yml  --vault-password-file /ansible/vault.txt -i /ansible/inventory_localhost -c local
-        
   executeServerspec:
     docker:
       - image: 'cimg/base:stable'
