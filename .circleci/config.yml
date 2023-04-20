@@ -43,8 +43,10 @@ jobs:
       - run: 
           name: ansible_vault_pass
           command: |
-            export ANSIBLE_VAULT_PASSWORD_FILE=~/bin/vault-env
+            vim ~/.bash_profile
+            export ANSIBLE_VAULT_PASSWORD_FILE = ~/.vault_pass
             export ANSIBLE_VAULT_PASSWORD=<password>
+            source ~/.bash_profile
             echo $ANSIBLE_VAULT_PASSWORD
 
       - ansible-playbook/playbook:
