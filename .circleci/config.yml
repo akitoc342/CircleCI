@@ -43,11 +43,11 @@ jobs:
       - run: 
           name: ansible_vault_pass
           command: |
-            echo "$ANSIBLE_VAULT_PASSWORD" > .vault_pass.txt
+            echo "$ANSIBLE_VAULT_PASSWORD" > env.txt
             ls
             pwd
       - store_artifacts:
-          path: .vault_pass.txt
+          path: env.txt
 
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
