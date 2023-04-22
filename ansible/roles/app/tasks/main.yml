@@ -33,7 +33,7 @@
 #config/credentials内に残っているdevelopment.yml.enc、production.yml.encを削除（appclone時の残りを削除）
 - name: Deleate old credentials1
   file:
-    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/evelopment.yml.enc
+    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/development.yml.enc
     state: absent
 - name: Deleate old credentials2
   file:
@@ -46,7 +46,7 @@
     path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
   register: masterkey_stat
 
-#マスターキーの作成 
+#マスターキーの作成
 - name: edit credentialfile
   template: 
     src: templates/production.yml.enc.j2
@@ -67,10 +67,12 @@
   lineinfile: 
     path: /home/ec2-user/.bash_profile
     line: 'export RAILS_MASTER_KEY="{{ master_key }}"'
+  when: not masterkey_stat.stat.exists
 
 - name: Load masterkey env setting
   become_user: ec2-user
   shell: bash -lc "source ~/.bash_profile"
+  when: not masterkey_stat.stat.exists
 
 #webpackerのビルド  
 - name: Build webpacker setting
