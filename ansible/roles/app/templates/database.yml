@@ -54,7 +54,7 @@ test:
 
 production:
   <<: *default
-  database: raisetech_live8_sample_app_production
+  database: cloudformationRDS
   username: <%= ENV['DATABASE_USER'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   host: <%= ENV['DATABASE_HOST'] %>
