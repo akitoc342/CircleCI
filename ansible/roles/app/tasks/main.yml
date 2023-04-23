@@ -102,7 +102,7 @@
     regexp: '\bconfig.active_storage.service = :amazon\b'
     replace: 'config.active_storage.service = :local'
 
-#データベースの作成、マイグレーションの実施
+#データベースの作成、マイグレーションの実施 
 - name: Setting database
   become_user: ec2-user
   block:
