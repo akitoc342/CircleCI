@@ -15,13 +15,12 @@
   when: check_nginx_installed is failed
 
 #Nginxの権限を0755へ変更
-- name: Change nginx/conf.d ownership
+- name: edit permission nginx
   become: yes
   file:
-    path: /etc/nginx/nginx.conf.d
-    owner: ec2-user
-    group: ec2-user
-    mode: '0755'
+    path: /etc/nginx
+    state: directory
+    mode: 0755
 
 #Nginxの設定ファイル読み込み
 - name: Setting Nginx
