@@ -22,7 +22,6 @@
     state: directory
     mode: 0755
 
-
 - name: edit permission /var/lib/nginx
   become: yes
   file: 
