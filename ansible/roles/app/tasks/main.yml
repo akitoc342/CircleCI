@@ -88,7 +88,7 @@
   npm:
     name: build
     path: /home/ec2-user/raisetech-live8-sample-app
-#production.rb内のcashe_classをfalseに変更 
+#production.rb内のcashe_classをfalseに変更
 - name: Cache class change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
