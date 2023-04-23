@@ -81,7 +81,6 @@
   - name: Load masterkey env setting
     become_user: ec2-user
     shell: bash -lc "source ~/.bash_profile"
-  when: not masterkey_stat.stat.exists
 
 #webpackerのビルド  
 - name: Build webpacker setting
