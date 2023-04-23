@@ -16,6 +16,7 @@
     owner: ec2-user
     group: ec2-user
 
+
 #データベースへのアクセス設定 
 - name: Set DB env
   lineinfile: 
@@ -82,6 +83,14 @@
     become_user: ec2-user
     shell: bash -lc "source ~/.bash_profile"
 
+#Nginx設定
+- name: Nginx config username fix
+  become_user: ec2-user
+  ansible.builtin.replace:
+    path: /etc/nginx/nginx.conf
+    regexp: '\buser nginx\b'
+    replace: 'user ec2-user'
+
 #webpackerのビルド  
 - name: Build webpacker setting
   become_user: ec2-user
@@ -100,6 +109,13 @@
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
     regexp: '\bconfig.active_storage.service = :amazon\b'
     replace: 'config.active_storage.service = :local'
+
+#Nginxスタート
+- name: Start Nginx
+  become: yes
+  ansible.builtin.command:
+    cmd: bash -lc "systemctl start nginx"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
 
 #package-lock.jsonの削除(npmとyarnで２つの管理ファイルは不要な為)
 - name: Deleate package-lock.json
@@ -127,4 +143,10 @@
   become_user: ec2-user
   ansible.builtin.command:
     cmd: bash -lc "bundle exec rails assets:precompile RAILS_ENV=production"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+- name: Start unicorn
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle exec unicorn -c config/unicorn.rb -E production -D"
     chdir: /home/ec2-user/raisetech-live8-sample-app/
