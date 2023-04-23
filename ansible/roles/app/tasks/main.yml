@@ -101,6 +101,12 @@
     regexp: '\bconfig.active_storage.service = :amazon\b'
     replace: 'config.active_storage.service = :local'
 
+#package-lock.jsonの削除(npmとyarnで２つの管理ファイルは不要な為)
+- name: Deleate package-lock.json
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/package-lock.json
+    state: absent
+
 #データベースの作成、マイグレーションの実施 
 - name: Setting database
   become_user: ec2-user
