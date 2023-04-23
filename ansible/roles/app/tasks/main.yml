@@ -47,37 +47,40 @@
   register: masterkey_stat
 
 #マスターキーの作成
-- name: edit credentialfile
-  template: 
-    src: templates/production.yml.enc.j2
-    dest: /home/ec2-user/raisetech-live8-sample-app/config/credentials.yml.enc
-    owner: ec2-user
-    group: ec2-user
+- name: Set master.key
+  block:
+  - name: edit credentialfile
+    template: 
+      src: templates/production.yml.enc.j2
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/credentials.yml.enc
+      owner: ec2-user
+      group: ec2-user
+
+  - name: edit key
+    template:
+      src: templates/production.masterkey.j2
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+      owner: ec2-user
+      group: ec2-user
+
+  - name: edit masterkey
+    become_user: ec2-user
+    lineinfile:
+      path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+      line: "{{ master_key }}"
   when: not masterkey_stat.stat.exists
 
-- name: edit key
-  template:
-    src: templates/production.masterkey.j2
-    dest: /home/ec2-user/raisetech-live8-sample-app/config/master.key
-    owner: ec2-user
-    group: ec2-user
-  when: not masterkey_stat.stat.exists
+#マスターキーをenvファイルに反映
+- name: Set env master.key
+  block:
+  - name: Add masterkey bash profile
+    lineinfile: 
+      path: /home/ec2-user/.bash_profile
+      line: 'export RAILS_MASTER_KEY="{{ master_key }}"'
 
-- name: edit masterkey
-  become_user: ec2-user
-  lineinfile:
-    path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
-    line: "{{ master_key }}"
-
-- name: Add masterkey bash profile
-  lineinfile: 
-    path: /home/ec2-user/.bash_profile
-    line: 'export RAILS_MASTER_KEY="{{ master_key }}"'
-  when: not masterkey_stat.stat.exists
-
-- name: Load masterkey env setting
-  become_user: ec2-user
-  shell: bash -lc "source ~/.bash_profile"
+  - name: Load masterkey env setting
+    become_user: ec2-user
+    shell: bash -lc "source ~/.bash_profile"
   when: not masterkey_stat.stat.exists
 
 #webpackerのビルド  
