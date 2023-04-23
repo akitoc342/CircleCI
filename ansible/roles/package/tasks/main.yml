@@ -55,3 +55,9 @@
     state: present
     lock_timeout: 180
 
+- name: yarn add
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "yarn add yarn"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
