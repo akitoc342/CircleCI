@@ -83,7 +83,7 @@
 
 #Nginx設定
 - name: Nginx config username fix
-  become: yes
+  become_user: ec2-user
   ansible.builtin.replace:
     path: /etc/nginx/nginx.conf
     regexp: '\buser nginx\b'
