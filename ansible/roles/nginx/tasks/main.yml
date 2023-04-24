@@ -8,7 +8,7 @@
   register: check_nginx_installed
   ignore_errors: yes
 
-#Nginxのインストール
+#Nginxのインストール 
 - name: Install nginx
   become: yes 
   shell: amazon-linux-extras install -y nginx1
