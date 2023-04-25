@@ -31,6 +31,7 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10SG.yml --stack-name SGtest
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
             aws cloudformation deploy --template cloudformation/lecture10RDS.yml --stack-name RDStest
+            aws cloudformation deploy --template cloudformation/lecture10ALB.yml --stack-name ALBtest
   executeAnsible:
     executor: ansible-playbook/default
     steps:
