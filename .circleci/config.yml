@@ -37,11 +37,11 @@ jobs:
           command: |
             mkdir -p /tmp/workspace
             RDS_ENDPOINT=$(aws rds describe-db-instances \
-              --db-instance-identifier dbinstance-sample01 \
+              --db-instance-identifier dbinstance-cloudformationRDS \
               --query "DBInstances[*].Endpoint.Address" \
               --output text > /tmp/workspace/rds-endpoint.txt)
             cat /tmp/workspace/rds-endpoint.txt
-            aws elbv2 describe-load-balancers --names ALB-sample01 --query "LoadBalancers[].DNSName" --output text> /tmp/workspace/alb-dns.txt
+            aws elbv2 describe-load-balancers --names ALB-cloudformationALB --query "LoadBalancers[].DNSName" --output text> /tmp/workspace/alb-dns.txt
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
