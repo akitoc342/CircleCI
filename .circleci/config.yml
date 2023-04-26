@@ -32,6 +32,25 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
             aws cloudformation deploy --template cloudformation/lecture10RDS.yml --stack-name RDStest
             aws cloudformation deploy --template cloudformation/lecture10ALB.yml --stack-name ALBtest
+      - run:
+          name: get RDS endpoint
+          command: |
+            mkdir -p /tmp/workspace
+            RDS_ENDPOINT=$(aws rds describe-db-instances \
+              --db-instance-identifier dbinstance-sample01 \
+              --query "DBInstances[*].Endpoint.Address" \
+              --output text > /tmp/workspace/rds-endpoint.txt)
+            cat /tmp/workspace/rds-endpoint.txt
+            aws elbv2 describe-load-balancers --names ALB-sample01 --query "LoadBalancers[].DNSName" --output text> /tmp/workspace/alb-dns.txt
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - rds-endpoint.txt
+            - alb-dns.txt
+      - store_artifacts:
+          path: env.txt
+            - rds-endpoint.txt
+            - alb-dns.txt
   executeAnsible:
     executor: ansible-playbook/default
     steps:
