@@ -14,6 +14,7 @@
   shell: amazon-linux-extras install -y nginx1
   when: check_nginx_installed is failed
 
+#ALBのDNS情報差し込み
 - name: edit nginx.conf
   become: yes
   lineinfile: 

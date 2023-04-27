@@ -33,7 +33,7 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10RDS.yml --stack-name RDStest
             aws cloudformation deploy --template cloudformation/lecture10ALB.yml --stack-name ALBtest
       - run:
-          name: get RDS endpoint
+          name: RDS endpoint set
           command: |
             mkdir -p /tmp/workspace
             RDS_ENDPOINT=$(aws rds describe-db-instances \
@@ -57,11 +57,9 @@ jobs:
       - ansible-playbook/install:
           version: '2.10.7'
       - run: 
-          name: ansible_vault_pass
+          name: vault_pass setting
           command: |
             echo "$ANSIBLE_VAULT_PASSWORD" > env.txt
-      - store_artifacts:
-          path: env.txt
       - attach_workspace:
           at: /tmp/workspace
       - run: cat /tmp/workspace/rds-endpoint.txt
