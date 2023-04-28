@@ -77,7 +77,10 @@ jobs:
           version: '3.1.2'
       - ruby/install-deps:
           app-dir: serverSpec
-      - run :
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: cat /tmp/workspace/alb-dns.txt
+      - run:
           name: executeServerspec
           command: |
             cd serverSpec
