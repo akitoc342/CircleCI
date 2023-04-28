@@ -75,8 +75,6 @@ jobs:
       - checkout
       - ruby/install:
           version: '3.1.2'
-      - ruby/install-deps:
-          app-dir: serverSpec
       - attach_workspace:
           at: /tmp/workspace
       - run: cat /tmp/workspace/alb-dns.txt
@@ -90,7 +88,7 @@ jobs:
             gem install ed25519
             gem install bcrypt_pbkdf
             env ALB_DNS=$(cat /tmp/workspace/alb-dns.txt) rake spec
-     
+
 workflows:
   raisetech:
     jobs:
