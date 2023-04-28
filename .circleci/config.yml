@@ -83,8 +83,12 @@ jobs:
       - run:
           name: executeServerspec
           command: |
-            cd serverSpec
-            bundle exec rake spec
+            cd serverspec
+            gem install bundler
+            gem install serverspec
+            gem install rake
+            gem install ed25519
+            gem install bcrypt_pbkdf
             env ALB_DNS=$(cat /tmp/workspace/alb-dns.txt) rake spec
      
 workflows:
