@@ -81,6 +81,7 @@ jobs:
       - run:
           name: executeServerspec
           command: |
+            cd serverSpec
             gem install bundler
             gem install serverspec
             gem install rake
