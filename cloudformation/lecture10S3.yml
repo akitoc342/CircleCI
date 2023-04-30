@@ -14,7 +14,7 @@ Resources:
       AccelerateConfiguration: 
         AccelerationStatus: Suspended
       AccessControl: Private
-      BucketName: !Sub s3contentsbucket
+      BucketName: s3contentsbucket
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault: 
