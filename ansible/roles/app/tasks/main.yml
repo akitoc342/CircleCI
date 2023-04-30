@@ -149,7 +149,7 @@
     path: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
   register: installed_imagemagic
 
-#imagemagic インストール
+#imagemagic インストール　
 - name: setting imagemagic
   block:
   - name: download imagemagic 
