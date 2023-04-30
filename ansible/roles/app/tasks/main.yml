@@ -105,7 +105,7 @@
 - name: storage change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: '\bconfig.active_storage.service = :amazon\b'
+    regexp: 'config.active_storage.service = :amazon'
     replace: 'config.active_storage.service = :local'
 
 #Nginxスタート
