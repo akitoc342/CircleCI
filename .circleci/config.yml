@@ -32,6 +32,7 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
             aws cloudformation deploy --template cloudformation/lecture10RDS.yml --stack-name RDStest
             aws cloudformation deploy --template cloudformation/lecture10ALB.yml --stack-name ALBtest
+            aws cloudformation deploy --template cloudformation/lecture10S3.yml --stack-name S3test
       - run:
           name: RDS endpoint set
           command: |
