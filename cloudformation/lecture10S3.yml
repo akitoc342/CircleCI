@@ -1,12 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: S3 sample 
 
-Parameters:
-  NameBase:
-    Description: this is base name.
-    Type: String
-    Default: sample
-
 Resources:
   CfnContentsBucket:          # S3バケットの設定
     Type: AWS::S3::Bucket
