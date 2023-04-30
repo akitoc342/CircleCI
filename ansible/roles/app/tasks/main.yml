@@ -80,6 +80,29 @@
   - name: Load masterkey env setting
     become_user: ec2-user
     shell: bash -lc "source ~/.bash_profile"
+#アクセスキーをenvファイルに設定
+- name: Set env accesskey
+  block:
+  - name: Add ACCESS_KEY_ID bash profile
+    lineinfile: 
+      path: /home/ec2-user/.bash_profile
+      line: 'export ACCESS_KEY_ID="{{ ACCESSKEY }}"'
+
+  - name: Load ACCESS_KEY_ID env setting
+    become_user: ec2-user
+    shell: bash -lc "source ~/.bash_profile"
+
+#シークレットキーをenvに設定
+- name: Set env secretkey
+  block:
+  - name: Add SECRET_ACCESS_KEY bash profile
+    lineinfile: 
+      path: /home/ec2-user/.bash_profile
+      line: 'export SECRET_ACCESS_KEY="{{ SECRETKEY }}"'
+
+  - name: Load SECRET_ACCESS_KEY env setting
+    become_user: ec2-user
+    shell: bash -lc "source ~/.bash_profile"
 
 #Nginx設定
 - name: Nginx config username fix

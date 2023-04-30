@@ -43,6 +43,7 @@ jobs:
               --output text > /tmp/workspace/rds-endpoint.txt)
             cat /tmp/workspace/rds-endpoint.txt
             aws elbv2 describe-load-balancers --names cloudformationALB --query "LoadBalancers[].DNSName" --output text> /tmp/workspace/alb-dns.txt
+
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
@@ -58,13 +59,17 @@ jobs:
       - ansible-playbook/install:
           version: '2.10.7'
       - run: 
-          name: vault_pass setting
+          name: secret setting
           command: |
             echo "$ANSIBLE_VAULT_PASSWORD" > env.txt
+            echo "AWS_ACCESS_KEY_ID" > accesskey.txt
+            echo "AWS_SECRET_ACCESS_KEY" > secretkey.txt
       - attach_workspace:
           at: /tmp/workspace
       - run: cat /tmp/workspace/rds-endpoint.txt
       - run: cat /tmp/workspace/alb-dns.txt
+      - run: cat ~/project/accesskey.txt
+      - run: cat ~/project/secretkey.txt
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "RDS_ENDPOINT=$(cat /tmp/workspace/rds-endpoint.txt)" --extra-vars "ALB_DNS=$(cat /tmp/workspace/alb-dns.txt)"'
