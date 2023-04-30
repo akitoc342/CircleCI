@@ -180,7 +180,7 @@
       cmd: bash -lc "make install"
       chdir: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
 
-#unicornスタート
+#unicornスタート 
 - name: Start unicorn
   become_user: ec2-user
   ansible.builtin.command:
