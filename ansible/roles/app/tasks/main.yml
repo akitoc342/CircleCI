@@ -111,19 +111,19 @@
 - name: Cache class change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: '\bconfig.cache_classes = true\b'
+    regexp: 'config.cache_classes = true'
     replace: 'config.cache_classes = false'
 #storageの変更
 - name: storage change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: '\bconfig.active_storage.service = :local\b'
+    regexp: 'config.active_storage.service = :local'
     replace: 'config.active_storage.service = :amazon'
 #s3bucketの設定
 - name: set s3 bucket
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
-    regexp: '\bbucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>\b'
+    regexp: 'bucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>'
     replace: 'bucket: s3contentsbucket'
 
 #access_keyの設定
