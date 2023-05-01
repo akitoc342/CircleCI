@@ -68,8 +68,6 @@ jobs:
           at: /tmp/workspace
       - run: cat /tmp/workspace/rds-endpoint.txt
       - run: cat /tmp/workspace/alb-dns.txt
-      - run: cat ~/project/accesskey.txt
-      - run: cat ~/project/secretkey.txt
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "RDS_ENDPOINT=$(cat /tmp/workspace/rds-endpoint.txt)" --extra-vars "ALB_DNS=$(cat /tmp/workspace/alb-dns.txt)"'
