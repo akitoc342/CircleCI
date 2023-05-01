@@ -117,8 +117,30 @@
 - name: storage change
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: '\bconfig.active_storage.service = :amazon\b'
-    replace: 'config.active_storage.service = :local'
+    regexp: '\bconfig.active_storage.service = :local\b'
+    replace: 'config.active_storage.service = :amazon'
+#s3bucketの設定
+- name: set s3 bucket
+  ansible.builtin.replace:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
+    regexp: '\bbucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>\b'
+    replace: 'bucket: s3contentsbucket'
+
+#access_keyの設定
+- name: replace config/storage.yml access_key_id
+  replace: 
+    path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
+    regexp: |
+      access_key_id\: \<\%\= Rails.application.credentials.dig\(\:aws, \:access_key_id\) \%\>
+    replace: |
+      access_key_id: <%= ENV['ACCESS_KEY'] %>
+- name: replace config/storage.yml secret_access_key
+  replace: 
+    path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
+    regexp: |
+      secret_access_key\: \<\%\= Rails.application.credentials.dig\(\:aws, \:secret_access_key\) \%\>
+    replace: |
+      secret_access_key: <%= ENV['SECRET_ACCESS_KEY'] %>
 
 #Nginxスタート
 - name: Start Nginx
