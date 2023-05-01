@@ -81,6 +81,18 @@
     become_user: ec2-user
     shell: bash -lc "source ~/.bash_profile"
 
+#アクセスキーをenvファイルに反映
+- name: set environment vars 
+  blockinfile:
+    dest: "/home/ec2-user/.bash_profile"
+    insertafter: EOF
+    content: |
+      export ACCESS_KEY='{{ (lookup('env','ACCESS_KEY_ID')) }}'
+      export SECRET_ACCESS_KEY='{{ (lookup('env','SECRET_ACCESS_KEY')) }}'
+- name: key env setting
+  become_user: ec2-user
+  shell: bash -lc "source ~/.bash_profile"
+
 #Nginx設定
 - name: Nginx config username fix
   become: yes
