@@ -64,6 +64,8 @@ jobs:
             echo "$ANSIBLE_VAULT_PASSWORD" > env.txt
             echo "$AWS_ACCESS_KEY_ID" > accesskey.txt
             echo "$AWS_SECRET_ACCESS_KEY" > secretkey.txt
+            cat ~/project/accesskey.txt
+            cat ~/project/secretkey.txt
       - attach_workspace:
           at: /tmp/workspace
       - run: cat /tmp/workspace/rds-endpoint.txt
