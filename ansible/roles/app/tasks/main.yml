@@ -127,12 +127,12 @@
       config.active_storage.service = :amazon
 #s3bucketの設定
 - name: set s3 bucket
-  ansible.builtin.replace:
+  replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
     regexp: |
       bucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>
     replace: |
-      bucket: s3contentsbucket
+      bucket: s3contentsbucket'
 
 #access_keyの設定
 - name: replace config/storage.yml access_key_id
