@@ -97,7 +97,7 @@
 - name: Nginx config username fix
   become: yes
   replace:
-    path: /etc/nginx/nginx.conf
+    path: "/etc/nginx/nginx.conf"
     regexp: |
       buser nginx
     replace: |
@@ -112,7 +112,7 @@
 #production.rb内のcashe_classをfalseに変更
 - name: Cache class change
   replace:
-    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb"
     regexp: |
       config.cache_classes = true
     replace: |
@@ -120,7 +120,7 @@
 #storageの変更
 - name: storage change
   replace:
-    path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb"
     regexp: |
       config.active_storage.service = :local
     replace: |
@@ -137,14 +137,14 @@
 #access_keyの設定
 - name: replace config/storage.yml access_key_id
   replace: 
-    path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
     regexp: |
       access_key_id\: \<\%\= Rails.application.credentials.dig\(\:aws, \:access_key_id\) \%\>
     replace: |
       access_key_id: <%= ENV['ACCESS_KEY'] %>
 - name: replace config/storage.yml secret_access_key
   replace: 
-    path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
     regexp: |
       secret_access_key\: \<\%\= Rails.application.credentials.dig\(\:aws, \:secret_access_key\) \%\>
     replace: |
