@@ -96,10 +96,12 @@
 #Nginx設定
 - name: Nginx config username fix
   become: yes
-  ansible.builtin.replace:
+  replace:
     path: /etc/nginx/nginx.conf
-    regexp: '\buser nginx\b'
-    replace: 'user ec2-user'
+    regexp: |
+      buser nginx
+    replace: |
+      user ec2-user
 
 #webpackerのビルド  
 - name: Build webpacker setting
@@ -109,22 +111,28 @@
     path: /home/ec2-user/raisetech-live8-sample-app
 #production.rb内のcashe_classをfalseに変更
 - name: Cache class change
-  ansible.builtin.replace:
+  replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: 'config.cache_classes = true'
-    replace: 'config.cache_classes = false'
+    regexp: |
+      config.cache_classes = true
+    replace: |
+      config.cache_classes = false
 #storageの変更
 - name: storage change
-  ansible.builtin.replace:
+  replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb
-    regexp: 'config.active_storage.service = :local'
-    replace: 'config.active_storage.service = :amazon'
+    regexp: |
+      config.active_storage.service = :local
+    replace: |
+      config.active_storage.service = :amazon
 #s3bucketの設定
 - name: set s3 bucket
   ansible.builtin.replace:
     path: /home/ec2-user/raisetech-live8-sample-app/config/storage.yml
-    regexp: 'bucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>'
-    replace: 'bucket: s3contentsbucket'
+    regexp: |
+      bucket: <%= Rails.application.credentials.dig(:aws, :active_storage_bucket_name) %>
+    replace: |
+      bucket: s3contentsbucket
 
 #access_keyの設定
 - name: replace config/storage.yml access_key_id
