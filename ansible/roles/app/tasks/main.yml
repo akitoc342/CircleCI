@@ -150,7 +150,7 @@
     replace: |
       secret_access_key: <%= ENV['SECRET_ACCESS_KEY'] %>
 
-#Nginxスタート
+#Nginxスタート 
 - name: Start Nginx
   become: yes
   ansible.builtin.command:
