@@ -13,9 +13,9 @@ GitHubのリモートリポジトリへのpushをトリガーとして、CircleC
 Git→package→ruby→mysql→appclone→bundler→nginx→appの順番で処理を実施  
 4. Serverspecを使用してアプリのデプロイされたリソースに対して、sample_spec.rbにあるテストを実施  
 - テストの内容  
-1. gitインストール  
-2. nginx起動  
-3. unicorn起動  
+1. gitインストール確認  
+2. nginx起動確認  
+3. unicorn起動確認  
 4. ALBのDNSにアクセスしてWebページが表示される  
 （レスポンスで200を返す）  
 上記内容のテストを実施
