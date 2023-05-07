@@ -7,7 +7,7 @@ Parameters:
       Default: aki33659
       Type: String
 Resources:
-#サブネットグループ作成
+#サブネットグループ作成 
   RDSSubnetGroup:
     Type: "AWS::RDS::DBSubnetGroup"
     Properties:
