@@ -163,7 +163,7 @@
     cmd: bash -lc "systemctl start nginx"
     chdir: /home/ec2-user/raisetech-live8-sample-app/
 
-#package-lock.jsonの削除(npmとyarnで２つの管理ファイルは不要な為)
+#package-lock.jsonの削除(npmとyarnで２つの管理ファイルは不要な為)　
 - name: Deleate package-lock.json
   file:
     path: /home/ec2-user/raisetech-live8-sample-app/package-lock.json
