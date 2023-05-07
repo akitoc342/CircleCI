@@ -27,7 +27,7 @@
 - name: rbenv setting
   shell: bash -lc "source ~/.bash_profile"
 
-#ruby-buildのインストール
+#ruby-buildのインストール 
 - name: install ruby-build
   git:
     repo: https://github.com/sstephenson/ruby-build.git
