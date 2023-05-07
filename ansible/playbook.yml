@@ -1,5 +1,14 @@
 ---
 - hosts: TargetNode
+  gather_facts: no
   become: yes
+  vars_files: vars.yml
   roles:
     - { role: git, tags: git }
+    - { role: package, tags: package }
+    - { role: ruby, tags: ruby }
+    - { role: mysql, tags: mysql }
+    - { role: appclone, tags: appclone }
+    - { role: bundler, tags: bundler }
+    - { role: nginx, tags: nginx }
+    - { role: app, tags: app }

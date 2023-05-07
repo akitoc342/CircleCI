@@ -1,0 +1,55 @@
+---
+#Nginxのインストール確認
+- name: Check nginx installed
+  become: yes
+  yum:
+    name: nginx
+    state: present
+  register: check_nginx_installed
+  ignore_errors: yes
+
+#Nginxのインストール  
+- name: Install nginx
+  become: yes 
+  shell: amazon-linux-extras install -y nginx1
+  when: check_nginx_installed is failed
+
+#ALBのDNS情報差し込み
+- name: edit nginx.conf
+  become: yes
+  lineinfile: 
+    path: /etc/nginx/nginx.conf
+    regexp: '  server_name localhost;'
+    line: '  server_name {{ ALB_DNS }};'
+
+#Nginxの権限を0755へ変更
+- name: edit permission nginx
+  become: yes
+  file:
+    path: /etc/nginx
+    state: directory
+    mode: 0755
+
+- name: edit permission /var/lib/nginx
+  become: yes
+  file: 
+    path: /var/lib/nginx
+    state: directory
+    mode: 0755
+    owner: ec2-user
+
+- name: edit permission /var/lib/nginx
+  become: yes
+  file: 
+    path: /var/lib/nginx/tmp
+    state: directory
+    mode: 0755
+    owner: ec2-user
+
+#Nginxの設定ファイル読み込み
+- name: Setting Nginx
+  template:
+    src: roles/nginx/templates/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: ec2-user
+    group: ec2-user

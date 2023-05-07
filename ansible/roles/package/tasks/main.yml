@@ -1,0 +1,63 @@
+# パッケージの更新
+---
+- name: update yum
+  become: yes
+  yum:
+    name: "*"
+    state: latest
+
+# パッケージのインストール
+- name: package install yum
+  become: yes
+  yum:
+    name: "{{ item }}"
+    state: present  
+  with_items:
+    - gcc-c++
+    - glibc-headers
+    - openssl-devel
+    - readline
+    - libyaml-devel
+    - readline-devel
+    - zlib
+    - zlib-devel
+    - libffi-devel
+    - libxml2
+    - libxslt
+    - libxml2-devel
+    - libxslt-devel
+    - sqlite-devel
+    - libpng-devel
+    - libjpeg-devel
+    - libtiff-devel
+    - gcc
+    - mysql-devel
+
+
+
+#　Nodejsのインストール  
+- name: Setup nodejs14.x
+  shell: curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
+
+- name: Installing present node.js
+  yum:
+    name: nodejs
+    state: present
+    lock_timeout: 180
+
+# yarnのインストール 
+- name: Install yarn package
+  get_url: url="https://dl.yarnpkg.com/rpm/yarn.repo" dest=/etc/yum.repos.d/yarn.repo
+
+- name: Installing yarn
+  yum:
+    name: yarn
+    state: present
+    lock_timeout: 180
+
+- name: yarn add
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "yarn add yarn"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+

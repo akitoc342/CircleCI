@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"  
 Description: EC2 template
-#ec2インスタンス作成　
+#ec2インスタンス作成
 Resources:  
   NewKeyPair:
         Type: AWS::EC2::KeyPair
@@ -27,7 +27,7 @@ Resources:
       Tags:
       - Key: Name
         Value: cloudformationEC2
-#ElasticIp定義 
+#ElasticIp定義
   IPAssoc:
         Type: AWS::EC2::EIPAssociation
         Properties:

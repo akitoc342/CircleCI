@@ -30,18 +30,54 @@ jobs:
             aws cloudformation deploy --template cloudformation/lecture10VPC.yml --stack-name VPCtest
             aws cloudformation deploy --template cloudformation/lecture10SG.yml --stack-name SGtest
             aws cloudformation deploy --template cloudformation/lecture10EC2.yml --stack-name EC2test2
+            aws cloudformation deploy --template cloudformation/lecture10RDS.yml --stack-name RDStest
+            aws cloudformation deploy --template cloudformation/lecture10ALB.yml --stack-name ALBtest
+            aws cloudformation deploy --template cloudformation/lecture10S3.yml --stack-name S3test
+      - run:
+          name: RDS endpoint set
+          command: |
+            mkdir -p /tmp/workspace
+            RDS_ENDPOINT=$(aws rds describe-db-instances \
+              --db-instance-identifier cloudformationRDS \
+              --query "DBInstances[*].Endpoint.Address" \
+              --output text > /tmp/workspace/rds-endpoint.txt)
+            cat /tmp/workspace/rds-endpoint.txt
+            aws elbv2 describe-load-balancers --names cloudformationALB --query "LoadBalancers[].DNSName" --output text> /tmp/workspace/alb-dns.txt
+
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - rds-endpoint.txt
+            - alb-dns.txt
   executeAnsible:
     executor: ansible-playbook/default
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 2f:7c:4f:93:66:0f:94:7d:f7:e3:7e:49:43:a2:f9:28
+            - 8b:07:4b:4d:14:34:3e:cd:65:b7:28:1d:77:9f:73:3f
       - ansible-playbook/install:
           version: '2.10.7'
+      - run: 
+          name: vaultpass setting
+          command: |
+            echo "$ANSIBLE_VAULT_PASSWORD" > env.txt
+      - run: 
+          name: ACCESS KEY setting
+          command: |
+            set -x
+            echo export ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> $BASH_ENV
+            echo export SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $BASH_ENV
+            source $BASH_ENV
+
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: cat /tmp/workspace/rds-endpoint.txt
+      - run: cat /tmp/workspace/alb-dns.txt
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa'
+          playbook-options: '-u ec2-user -i ansible/hosts/inventory --private-key ~/.ssh/id_rsa --extra-vars "RDS_ENDPOINT=$(cat /tmp/workspace/rds-endpoint.txt)" --extra-vars "ALB_DNS=$(cat /tmp/workspace/alb-dns.txt)"'
+
   executeServerspec:
     docker:
       - image: 'cimg/base:stable'
@@ -49,14 +85,20 @@ jobs:
       - checkout
       - ruby/install:
           version: '3.1.2'
-      - ruby/install-deps:
-          app-dir: serverSpec
-      - run :
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: cat /tmp/workspace/alb-dns.txt
+      - run:
           name: executeServerspec
           command: |
             cd serverSpec
-            bundle exec rake spec
-     
+            gem install bundler
+            gem install serverspec
+            gem install rake
+            gem install ed25519
+            gem install bcrypt_pbkdf
+            env ALB_DNS=$(cat /tmp/workspace/alb-dns.txt) rake spec
+
 workflows:
   raisetech:
     jobs:

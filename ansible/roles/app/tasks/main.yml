@@ -1,0 +1,230 @@
+---
+- name: Change user permission
+  become: yes
+  ansible.builtin.file:
+    path: /home/ec2-user
+    state: directory
+    mode: 0755
+
+#データベース設定のファイルをコピー  
+- name: edit database.yml
+  template: 
+    src: templates/database.yml
+    dest: /home/ec2-user/raisetech-live8-sample-app/config/database.yml
+    owner: ec2-user
+    group: ec2-user
+
+
+#データベースへのアクセス設定 
+- name: Set DB env
+  lineinfile: 
+    path: /home/ec2-user/.bash_profile
+    line: 'export {{ item }}'
+  with_items:
+      - "{{ DATABASE_USERNAME }}"
+      - "{{ DATABASE_PASSWORD }}"
+      - "{{ DATABASE_HOSTNAME }}"
+
+- name: Load database env setting
+  become_user: ec2-user
+  shell: bash -lc "source ~/.bash_profile"
+
+#config/credentials内に残っているdevelopment.yml.enc、production.yml.encを削除（appclone時の残りを削除）
+- name: Deleate old credentials1
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/development.yml.enc
+    state: absent
+- name: Deleate old credentials2
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/credentials/production.yml.enc
+    state: absent
+
+#マスターキーの状態確認 
+- name: Check masterkey exists
+  stat:
+    path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+  register: masterkey_stat
+
+#マスターキーの作成
+- name: Set master.key
+  block:
+  - name: edit credentialfile
+    template: 
+      src: templates/production.yml.enc.j2
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/credentials.yml.enc
+      owner: ec2-user
+      group: ec2-user
+
+  - name: edit key
+    template:
+      src: templates/production.masterkey.j2
+      dest: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+      owner: ec2-user
+      group: ec2-user
+
+  - name: edit masterkey
+    become_user: ec2-user
+    lineinfile:
+      path: /home/ec2-user/raisetech-live8-sample-app/config/master.key
+      line: "{{ master_key }}"
+  when: not masterkey_stat.stat.exists
+
+#マスターキーをenvファイルに反映
+- name: Set env master.key
+  block:
+  - name: Add masterkey bash profile
+    lineinfile: 
+      path: /home/ec2-user/.bash_profile
+      line: 'export RAILS_MASTER_KEY="{{ master_key }}"'
+
+  - name: Load masterkey env setting
+    become_user: ec2-user
+    shell: bash -lc "source ~/.bash_profile"
+
+#アクセスキーをenvファイルに反映
+- name: set environment vars 
+  blockinfile:
+    dest: "/home/ec2-user/.bash_profile"
+    insertafter: EOF
+    content: |
+      export ACCESS_KEY='{{ (lookup('env','ACCESS_KEY_ID')) }}'
+      export SECRET_ACCESS_KEY='{{ (lookup('env','SECRET_ACCESS_KEY')) }}'
+- name: key env setting
+  become_user: ec2-user
+  shell: bash -lc "source ~/.bash_profile"
+
+#Nginx設定
+- name: Nginx config username fix
+  become: yes
+  replace:
+    path: "/etc/nginx/nginx.conf"
+    regexp: |
+      buser nginx
+    replace: |
+      user ec2-user
+
+#webpackerのビルド  
+- name: Build webpacker setting
+  become_user: ec2-user
+  npm:
+    name: build
+    path: /home/ec2-user/raisetech-live8-sample-app
+#production.rb内のcashe_classをfalseに変更
+- name: Cache class change
+  replace:
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb"
+    regexp: |
+      config.cache_classes = true
+    replace: |
+      config.cache_classes = false
+#storageの変更
+- name: storage change
+  replace:
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/environments/production.rb"
+    regexp: |
+      config.active_storage.service = :local
+    replace: |
+      config.active_storage.service = :amazon
+#s3bucketの設定
+- name: set s3 bucket
+  replace:
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
+    regexp: |
+      bucket\: \<\%\= Rails.application.credentials.dig\(\:aws, \:active_storage_bucket_name\) \%\>
+    replace: |
+      bucket: s3contentsbucket
+
+#access_keyの設定
+- name: replace config/storage.yml access_key_id
+  replace: 
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
+    regexp: |
+      access_key_id\: \<\%\= Rails.application.credentials.dig\(\:aws, \:access_key_id\) \%\>
+    replace: |
+      access_key_id: <%= ENV['ACCESS_KEY'] %>
+- name: replace config/storage.yml secret_access_key
+  replace: 
+    path: "/home/ec2-user/raisetech-live8-sample-app/config/storage.yml"
+    regexp: |
+      secret_access_key\: \<\%\= Rails.application.credentials.dig\(\:aws, \:secret_access_key\) \%\>
+    replace: |
+      secret_access_key: <%= ENV['SECRET_ACCESS_KEY'] %>
+
+#Nginxスタート 
+- name: Start Nginx
+  become: yes
+  ansible.builtin.command:
+    cmd: bash -lc "systemctl start nginx"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+#package-lock.jsonの削除(npmとyarnで２つの管理ファイルは不要な為)
+- name: Deleate package-lock.json
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app/package-lock.json
+    state: absent
+
+#データベースの作成、マイグレーションの実施 
+- name: Setting database
+  become_user: ec2-user
+  block:
+  - name: Create database
+    ansible.builtin.command:
+      cmd: bash -lc "bundle exec rails db:create RAILS_ENV=production"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+    ignore_errors: yes
+  - name: Migrate database
+    ansible.builtin.command:
+      cmd: bash -lc "bundle exec rails db:migrate RAILS_ENV=production"
+      chdir: /home/ec2-user/raisetech-live8-sample-app/
+    ignore_errors: yes
+
+#コンパイルの実施  
+- name: asset precompile
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle exec rails assets:precompile RAILS_ENV=production"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+
+#imagemagic インストール確認
+- name: check installed imagemagic
+  stat:
+    path: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
+  register: installed_imagemagic
+
+#imagemagic インストール　
+- name: setting imagemagic
+  block:
+  - name: download imagemagic 
+    become: yes
+    get_url:
+      url: http://www.imagemagick.org/download/ImageMagick.tar.gz
+      dest: /home/ec2-user/
+    when: not installed_imagemagic.stat.exists
+  - name: install imagemagic1
+    become_user: ec2-user
+    ansible.builtin.command:
+      cmd: bash -lc "tar -vxf ImageMagick.tar.gz"
+      chdir: /home/ec2-user/
+    when: not installed_imagemagic.stat.exists
+  - name: install imagemagic2
+    become_user: ec2-user
+    ansible.builtin.command:
+      cmd: bash -lc "./configure"
+      chdir: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
+  - name: make imagemagic
+    become_user: ec2-user
+    ansible.builtin.command:
+      cmd: bash -lc "make"
+      chdir: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
+  - name: install imagemagic3
+    become: yes
+    ansible.builtin.command:
+      cmd: bash -lc "make install"
+      chdir: /home/ec2-user/ImageMagick-{{ imagemagic_ver }}
+
+#unicornスタート
+- name: Start unicorn
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle exec unicorn -c config/unicorn.rb -E production -D"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/

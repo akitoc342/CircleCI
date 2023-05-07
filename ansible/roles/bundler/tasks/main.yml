@@ -1,0 +1,28 @@
+---
+#ディレクトリの権限変更
+- name: edit permission sampleapp
+  file:
+    path: /home/ec2-user/raisetech-live8-sample-app
+    state: directory
+    owner: ec2-user
+    group: ec2-user
+    recurse: yes
+
+#gemのアップデート
+- name: gem update
+  become_user: ec2-user
+  shell: bash -lc "gem update --system"  
+
+#bundler　install
+- name: install bundler 
+  gem:
+    name: bundler
+    version: "{{ bundler_version }}"
+    executable: /home/ec2-user/.rbenv/shims/gem
+
+#gem  install
+- name: gem install
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "bundle install --without development test"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/

@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 sample 
+
+Resources:
+  CfnContentsBucket:          # S3バケットの設定
+    Type: AWS::S3::Bucket
+    Properties:
+      AccelerateConfiguration: 
+        AccelerationStatus: Suspended
+      AccessControl: Private
+      BucketName: s3contentsbucket
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: 
+              SSEAlgorithm: AES256 
+      VersioningConfiguration:
+        Status: Suspended
+      
