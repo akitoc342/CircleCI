@@ -6,7 +6,7 @@
     state: directory
     mode: 0755
 
-#データベース設定のファイルをコピー 
+#データベース設定のファイルをコピー 　
 - name: edit database.yml
   template: 
     src: templates/database.yml
@@ -15,7 +15,7 @@
     group: ec2-user
 
 
-#データベースへのアクセス設定 
+#データベースへのアクセス設定 　　
 - name: Set DB env
   lineinfile: 
     path: /home/ec2-user/.bash_profile
