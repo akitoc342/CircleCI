@@ -6,6 +6,12 @@
     state: directory
     mode: 0755
 
+- name: yarn add
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "yarn add yarn"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+    
 #データベース設定のファイルをコピー 　
 - name: edit database.yml
   template: 
