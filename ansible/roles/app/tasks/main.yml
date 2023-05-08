@@ -6,7 +6,13 @@
     state: directory
     mode: 0755
 
-#データベース設定のファイルをコピー  
+- name: yarn add
+  become_user: ec2-user
+  ansible.builtin.command:
+    cmd: bash -lc "yarn add yarn"
+    chdir: /home/ec2-user/raisetech-live8-sample-app/
+    
+#データベース設定のファイルをコピー 　
 - name: edit database.yml
   template: 
     src: templates/database.yml
@@ -15,7 +21,7 @@
     group: ec2-user
 
 
-#データベースへのアクセス設定 
+#データベースへのアクセス設定 　　
 - name: Set DB env
   lineinfile: 
     path: /home/ec2-user/.bash_profile
@@ -163,7 +169,7 @@
     path: /home/ec2-user/raisetech-live8-sample-app/package-lock.json
     state: absent
 
-#データベースの作成、マイグレーションの実施 
+#データベースの作成、マイグレーションの実施  
 - name: Setting database
   become_user: ec2-user
   block:
